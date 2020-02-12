@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HW3 {
     class SockMatching {
-        private static ConcurrentQueue<Sock> queue = new ConcurrentQueue<Sock>();
+        private static ConcurrentBag<Sock> bag = new ConcurrentBag<Sock>();
 
         public static void Main(String[] args) {
             string[] colors = { "red", "blue", "green", "orange" };
@@ -30,7 +30,7 @@ namespace HW3 {
         public static void createSocks(String color, int num) {
             for(int i = 0; i < num; i++) {
                 Sock sock = new Sock(color);
-                queue.Enqueue(sock);
+                bag.Add(sock);
                 Console.WriteLine(sock.color + " sock is created!");
             }
         }
@@ -38,24 +38,32 @@ namespace HW3 {
 
 
         public static void matchSocks() {
-            int k = 0;
-            int z = queue.Count;
-            for (int i = 0; i < z; i++) {
-                Boolean foundPair = false;
-                Sock mySock = null;
-                queue.TryDequeue(out mySock);
-                foreach (Sock sock in queue) {
-                    if (sock.color.Equals(mySock.color)) {
-                        k++;
-                        Console.WriteLine("Found pair " + k);
-                        foundPair = true;
-                    }
-                }
+            Sock tmpSock = null;
+            bag.TryTake(out tmpSock);
+            int pairs = 0;
+            foreach(Sock sock in bag) {
+                if (sock.color.Equals(tmpSock.color)) {
+                    Boolean foundPair = false;
+                    int size = bag.Count;
 
-                if (!foundPair) {
-                    queue.Enqueue(mySock);
+                    while ((foundPair == false)) {
+                        Sock tmp = null;
+                        bag.TryTake(out tmp);
+
+                        if (sock.color.Equals(tmp.color)) {
+                            foundPair = true;
+                        } else {
+                            bag.Add(tmp);
+                        }
+
+                        size--;
+                        //Console.WriteLine(pairs);
+                    }
+                    pairs++;
                 }
             }
+
+            Console.WriteLine(pairs);
         }
     }
 
