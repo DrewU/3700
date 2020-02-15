@@ -10,7 +10,7 @@ namespace HW3 {
     class SockMatching {
         private static readonly ConcurrentBag<Sock> bag = new ConcurrentBag<Sock>();
 
-        public static void Main(String[] args) {
+        public static void tmp(String[] args) {
             string[] colors = { "red", "blue", "green", "orange" };
             List<Task> tasks = new List<Task>();
 
@@ -80,10 +80,11 @@ namespace HW3 {
         }
 
         class Sock{
-            public String color;
+            public String color { get; set; }
             public Sock(String sockColor) {
                 color = sockColor;
             }
+
         }
     
     }
