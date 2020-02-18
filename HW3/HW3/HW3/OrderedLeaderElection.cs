@@ -9,10 +9,11 @@ namespace HW3 {
         public const int min = Int32.MinValue;
         public const int max = Int32.MaxValue;
         public static ConcurrentDictionary<int, Thread> threadCollection = new ConcurrentDictionary<int, Thread>();
-        public static int maxRank = max;
+        public static int maxRank = min;
         public static void Main(String[] args) {
-
-            generateThreads(5);
+            Console.WriteLine("How many threads would you like?");
+            int val = Convert.ToInt32(Console.ReadLine());
+            generateThreads(val);
 
         }
 
@@ -28,8 +29,8 @@ namespace HW3 {
                 official1.rank = rand.Next(min, max);
                 official1.leader = "Thread " + i;
                 Thread thread1 = new Thread(new ThreadStart(official1.value));
-                threadCollection.TryAdd(official1.rank, thread1);
                 thread1.Name = ("Thread " + i);
+                threadCollection.TryAdd(official1.rank, thread1);
                 thread1.Start();
                 rankThread.Interrupt();
                 rankThread.Join();
@@ -37,23 +38,24 @@ namespace HW3 {
         }
         class StayAwake {
             bool sleepSwitch = false;
-
             public StayAwake() { }
             public void ThreadMethod() {
                 try {
                     
                     Thread.Sleep(Timeout.Infinite);
                 } catch (ThreadInterruptedException e) {
-
-                        foreach (var thread in threadCollection) {
-                            thread.Value.Interrupt();
-                            thread.Value.Join();
+                    int currentMax = maxRank;
+                    foreach (var thread in threadCollection) {
+                        if(thread.Key > currentMax) {
+                            currentMax = thread.Key;
+                            maxRank = currentMax;
+                            foreach (var thread2 in threadCollection) {
+                                thread2.Value.Interrupt();
+                                thread2.Value.Join();
+                            }
                         }
-                    
+                    }                    
                 }
-
-
-
             }
         }
         class ElectedOfficial {
@@ -67,12 +69,8 @@ namespace HW3 {
                 try {
                     Thread.Sleep(Timeout.Infinite);
                 } catch (ThreadInterruptedException e) {
-                    int currentMaxRank = min;
-                    foreach (var thread in threadCollection) {
-                        if (thread.Key > currentMaxRank) {
-                            currentMaxRank = thread.Key;
-                        }
-                    }
+                    int currentMaxRank = maxRank;
+
                     Thread tmp = null;
                     threadCollection.TryGetValue(currentMaxRank, out tmp);
                     leader = tmp.Name;

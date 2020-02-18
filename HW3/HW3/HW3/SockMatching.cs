@@ -16,7 +16,7 @@ namespace HW3 {
 
             foreach (var color in colors) {
                 Random random = new Random();
-                Task t = Task.Run(() => createSocks(color, random.Next(1, 10)));
+                Task t = Task.Run(() => createSocks(color, random.Next(1, 100)));
                 tasks.Add(t);
             }
             Task.WaitAll(tasks.ToArray());
@@ -32,7 +32,7 @@ namespace HW3 {
             for (int i = 0; i < num; i++) {
                 Sock sock = new Sock(color);
                 bag.Add(sock);
-                Console.WriteLine(color + " thread: Created a " + color + " sock");
+                Console.WriteLine(color + "Sock: Produced " + i + " of " + num + " " + color + " socks.");
             }
         }
 
@@ -67,7 +67,6 @@ namespace HW3 {
                     sockList.Remove(new Sock(count.Key));
                     sockList.Remove(new Sock(count.Key));
                     Console.WriteLine("Matching thread: Found a pair of " + count.Key + " socks");
-                    // Needs to be a task queue
                     new Thread(() => washingMachine(new Sock(count.Key), new Sock(count.Key))).Start();
                 }
             }
