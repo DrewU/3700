@@ -10,7 +10,7 @@ namespace HW3 {
         public const int max = Int32.MaxValue;
         public static ConcurrentDictionary<int, Thread> threadCollection = new ConcurrentDictionary<int, Thread>();
         public static int maxRank = min;
-        public static void Main(String[] args) {
+        public static void tmp(String[] args) {
             Console.WriteLine("How many threads would you like?");
             int val = Convert.ToInt32(Console.ReadLine());
             generateThreads(val);
