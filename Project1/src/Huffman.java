@@ -16,23 +16,30 @@ public class Huffman {
     private static Map<Character, String> charPrefixHashMap = new HashMap<>();
 
     public static void main(String[] args) {
+        long before = 0;
+        long after = 0;
         String tmp = FileToString("constitution.txt");
-        String fuck = "This is broken afffff sdflj;khasddkl;sfjgh asd;kljfgsad;lkifg s;adklfgffffffffffffffffffffffffffffffasdfasdf sadf sadf sadf asdfsadfsadf sad fsdaf sadf wFSD GRDFHJFGJAGS Dfffffffffffffff;weslku";
-        uncompressedSize = fuck.getBytes().length * 8;
-        System.out.println("Size of uncompressed String: " + uncompressedSize);
-        decode(Encode(fuck));
-        System.out.println(toBinaryString(fuck));
-        System.out.println("Size of compressed String: " + compressedSize);
-        System.out.println("Compressed by: " + (compressedSize/uncompressedSize)*100);
-        charPrefixHashMap = new HashMap<>();
-//
+        uncompressedSize = tmp.getBytes().length * 8;
+        System.err.println("Size of uncompressed String: " + uncompressedSize);
+
+//        decode(Encode(tmp));
+//        System.err.println("Size of compressed String: " + compressedSize);
+//        System.err.println("Compressed by: " + (compressedSize/uncompressedSize)*100 + "%");
+//        charPrefixHashMap = new HashMap<>();
+
 //        decode(EncodeThreadedTask(tmp, 10));
 //        charPrefixHashMap = new HashMap<>();
-//
+//        System.err.println("Size of compressed String: " + compressedSize);
+//        System.err.println("Compressed by: " + (compressedSize/uncompressedSize)*100 + "%");
+
 //        decode(EncodeFixedExecutorTask(FileToString("constitution.txt")));
 //        charPrefixHashMap = new HashMap<>();
-//
-//        decode(EncodeCachedExecutorTask(FileToString("constitution.txt")));
+//        System.err.println("Size of compressed String: " + compressedSize);
+//        System.err.println("Compressed by: " + (compressedSize/uncompressedSize)*100 + "%");
+
+        decode(EncodeCachedExecutorTask(FileToString("constitution.txt")));
+        System.err.println("Size of compressed String: " + compressedSize);
+        System.err.println("Compressed by: " + (compressedSize/uncompressedSize)*100 + "%");
     }
 
     public static String toBinaryString(String s) {
@@ -109,7 +116,7 @@ public class Huffman {
     public static String Encode(String message) {
         long before = 0;
         long after = 0;
-        before = System.nanoTime();
+        before = System.currentTimeMillis();
         HashMap<Character, Integer> huffmanMap = new HashMap<>();
         for (int i = 0; i < message.length(); i++) {
             if (!huffmanMap.containsKey(message.charAt(i))) {
@@ -118,8 +125,8 @@ public class Huffman {
                 huffmanMap.put(message.charAt(i), huffmanMap.get(message.charAt(i)) + 1);
             }
         }
-        after = System.nanoTime();
-        System.err.println(after-before);
+        after = System.currentTimeMillis();
+        System.err.println("Time taken: " + (after - before));
         HuffmanNode head = makeTree(huffmanMap);
         setPrefixCodes(head, new StringBuilder());
         System.err.println("Character Prefix Map = " + charPrefixHashMap);
@@ -135,7 +142,7 @@ public class Huffman {
     public static String EncodeThreadedTask(String message, int numThreads) {
         long before = 0;
         long after = 0;
-        before = System.nanoTime();
+        before = System.currentTimeMillis();
         HashMap<Character, Integer> huffmanMap = new HashMap<>();
         ArrayList<EncodeThread> results = new ArrayList();
         int batchSize = message.length() / numThreads;
@@ -171,8 +178,8 @@ public class Huffman {
                 }
             }
         }
-        after = System.nanoTime();
-        System.err.println(after-before);
+        after = System.currentTimeMillis();
+        System.err.println("Time taken: " + (after - before));
         HuffmanNode head = makeTree(huffmanMap);
         setPrefixCodes(head, new StringBuilder());
         System.err.println("Character Prefix Map = " + charPrefixHashMap);
@@ -210,7 +217,7 @@ public class Huffman {
         awaitTerminationAfterShutdown(executor);
         long before = 0;
         long after = 0;
-        before = System.nanoTime();
+        before = System.currentTimeMillis();
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -227,8 +234,8 @@ public class Huffman {
                 }
             }
         }
-        after = System.nanoTime();
-        System.err.println(after-before);
+        after = System.currentTimeMillis();
+        System.err.println("Time taken: " + (after - before));
         HuffmanNode head = makeTree(huffmanMap);
         setPrefixCodes(head, new StringBuilder());
         System.err.println("Character Prefix Map = " + charPrefixHashMap);
@@ -266,7 +273,7 @@ public class Huffman {
         awaitTerminationAfterShutdown(executor);
         long before = 0;
         long after = 0;
-        before = System.nanoTime();
+        before = System.currentTimeMillis();
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -283,8 +290,8 @@ public class Huffman {
                 }
             }
         }
-        after = System.nanoTime();
-        System.err.println(after-before);
+        after = System.currentTimeMillis();
+        System.err.println("Time taken: " + (after - before));
         HuffmanNode head = makeTree(huffmanMap);
         setPrefixCodes(head, new StringBuilder());
         System.err.println("Character Prefix Map = " + charPrefixHashMap);

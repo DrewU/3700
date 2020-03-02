@@ -97,7 +97,7 @@
       <workItem from="1582660199138" duration="1918000" />
       <workItem from="1582771278830" duration="1974000" />
       <workItem from="1583097680504" duration="9233000" />
-      <workItem from="1583173137229" duration="637000" />
+      <workItem from="1583173137229" duration="5034000" />
     </task>
     <servers />
   </component>
@@ -116,5 +116,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Huffman.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
