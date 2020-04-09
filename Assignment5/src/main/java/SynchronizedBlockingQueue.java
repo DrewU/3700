@@ -9,7 +9,7 @@ public class SynchronizedBlockingQueue {
 
     public static long testSynchronized(int numProducers, int numConsumers){
         long before = System.currentTimeMillis();
-        final PC pc = new PC();
+        ProducerConsumer pc = new ProducerConsumer();
 
         ArrayList<Thread> producers = new ArrayList<>();
         ArrayList<Thread> consumers = new ArrayList<>();
@@ -44,7 +44,6 @@ public class SynchronizedBlockingQueue {
             consumers.add(t1);
         }
 
-
         for (Thread t : producers) {
             t.start();
         }
@@ -64,7 +63,7 @@ public class SynchronizedBlockingQueue {
         return System.currentTimeMillis() - before;
     }
 
-    public static class PC {
+    public static class ProducerConsumer {
         LinkedList<Integer> list = new LinkedList<>();
         int capacity = 5;
 
@@ -74,12 +73,7 @@ public class SynchronizedBlockingQueue {
                 synchronized (this) {
                     while (list.size() == capacity)
                         wait();
-
-
                     list.add(value++);
-
-                    //System.out.println("Produced: "+ value + ":by thread:"+ Thread.currentThread().getName());
-
                     notify();
                 }
             }
@@ -89,17 +83,10 @@ public class SynchronizedBlockingQueue {
         public void consume() throws InterruptedException {
             while (true) {
                 synchronized (this) {
-
                     while (list.size() == 0)
                         wait();
-
                     int val = list.removeFirst();
-
-                    //System.out.println("Consumed: "+ val + ":by thread:"+ Thread.currentThread().getName());
-
                     notify();
-
-                    //Thread.sleep(1000);
                 }
             }
         }

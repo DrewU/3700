@@ -16,10 +16,14 @@ public class AtomicBlockingQueue<T> extends BlockingQueue<T> {
     }
 
     public void put (T t) {
-
+        if(!isInUse.get()){
+        }
     }
 
     public T get() {
+        if(!isInUse.get()){
+
+        }
         return q.poll();
     }
 
